@@ -1,0 +1,8 @@
+ServiceName: 'myreport-status'
+InterfaceName: 'items'
+Description: 'myreport-status'
+APIDoc: ''
+Interfaces: 'search,pagination'
+RequiredScopes: ''
+AdditionalParameters:
+Method: ''
