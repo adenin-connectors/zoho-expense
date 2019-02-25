@@ -10,6 +10,7 @@ function api(path, opts) {
   if (typeof path !== 'string') {
     return Promise.reject(new TypeError(`Expected \`path\` to be a string, got ${typeof path}`));
   }
+
   opts = Object.assign({
     json: true,
     token: _activity.Context.connector.token,
@@ -25,12 +26,12 @@ function api(path, opts) {
     accept: 'application/json',
     'user-agent': 'adenin Now Assistant Connector, https://www.adenin.com/now-assistant'
   }, opts.headers);
+
   if (opts.token) {
     opts.headers.Authorization = `Zoho-oauthtoken ${opts.token}`;
   }
 
   const url = /^http(s)\:\/\/?/.test(path) && opts.endpoint ? path : opts.endpoint + path;
-
   if (opts.stream) {
     return got.stream(url, opts);
   }

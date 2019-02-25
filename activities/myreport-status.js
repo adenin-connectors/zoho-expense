@@ -20,7 +20,7 @@ module.exports = async (activity) => {
     if (noOfReports != 0) {
       reportStatus = {
         ...reportStatus,
-        description: `You have ${noOfReports} expense reports waiting for approval.`,
+        description: `You have ${noOfReports} expense ${noOfReports > 1 ? " reports" : " report"} waiting for approval.`,
         color: 'blue',
         value: noOfReports,
         actionable: true
