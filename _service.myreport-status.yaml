@@ -1,6 +1,6 @@
 ServiceName: 'myreport-status'
-InterfaceName: 'items'
-Description: 'myreport-status'
+InterfaceName: 'status'
+Description: 'My Expense Status'
 APIDoc: ''
 Interfaces: 'search,pagination'
 RequiredScopes: ''

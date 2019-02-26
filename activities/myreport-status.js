@@ -1,13 +1,16 @@
 'use strict';
 
-const logger = require('@adenin/cf-logger');
-const handleError = require('@adenin/cf-activity').handleError;
+const cfActivity = require('@adenin/cf-activity');
 const api = require('./common/api');
 
 module.exports = async (activity) => {
   try {
     api.initialize(activity);
     const response = await api('/expensereports?filter_by=Type.Approval%2CStatus.Submitted');
+
+    if (!cfActivity.isResponseOk(activity, response)) {
+      return;
+    }
 
     let reportStatus = {
       title: 'Reports Pending Approval',
@@ -36,6 +39,6 @@ module.exports = async (activity) => {
     activity.Response.Data = reportStatus;
 
   } catch (error) {
-    handleError(error, activity);
+    cfActivity.handleError(error, activity);
   }
 };
