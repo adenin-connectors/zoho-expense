@@ -27,18 +27,17 @@ module.exports = async (activity) => {
         color: 'blue',
         value: noOfReports,
         actionable: true
-      }
+      };
     } else {
       reportStatus = {
         ...reportStatus,
         description: `You have no unapproved expense reports`,
         actionable: false
-      }
+      };
     }
-
+    
     activity.Response.Data = reportStatus;
-
   } catch (error) {
-    cfActivity.handleError(error, activity);
+    cfActivity.handleError(activity, error);
   }
 };

@@ -21,7 +21,6 @@ function api(path, opts) {
     }
   }, opts);
 
-
   opts.headers = Object.assign({
     accept: 'application/json',
     'user-agent': 'adenin Now Assistant Connector, https://www.adenin.com/now-assistant'
@@ -37,26 +36,8 @@ function api(path, opts) {
   }
 
   return got(url, opts).catch(err => {
-    if (err.statusCode == 401) {
-      err.response.statusCode = err.statusCode = 461;
-      err.message = err.message.replace('401', '461');
-    }
     throw err;
   });
-}
-// convert response from /issues endpoint to 
-api.convertReports = function (response) {
-  let items = [];
-  let reports = response.body.expense_reports;
-
-  // iterate through each issue and extract id, title, etc. into a new array
-  for (let i = 0; i < reports.length; i++) {
-    let raw = reports[i];
-    let item = { id: raw.report_id, title: raw.report_name, description: raw.description, link: `https://expense.zoho.com/app#/expensereports/${raw.report_id}`, raw: raw }
-    items.push(item);
-  }
-
-  return { items: items };
 }
 
 const helpers = [
