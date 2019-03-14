@@ -6,7 +6,10 @@ const api = require('./common/api');
 module.exports = async function (activity) {
   try {
     api.initialize(activity);
-    const response = await api('/expensereports?filter_by=Type.Approval%2CStatus.Submitted');
+
+    var pagination = cfActivity.pagination(activity);
+    const response = await api(`/expensereports?filter_by=Type.Approval%2CStatus.Submitted`+
+    `&page=${pagination.page}&per_page=${pagination.pageSize}`);
 
     if (!cfActivity.isResponseOk(activity, response)) {
       return;

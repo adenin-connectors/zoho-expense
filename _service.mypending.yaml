@@ -1,2 +1,8 @@
+ServiceName: 'mypending'
 InterfaceName: items
 Description: List Of Reports
+APIDoc: ''
+Interfaces: 'search,pagination'
+RequiredScopes: ''
+AdditionalParameters:
+Method: ''
