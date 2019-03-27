@@ -1,21 +1,16 @@
 'use strict';
-
-const cfActivity = require('@adenin/cf-activity');
 const api = require('./common/api');
 
 module.exports = async (activity) => {
   try {
-    api.initialize(activity);
     const response = await api('/expensereports?filter_by=Type.Approval%2CStatus.Submitted');
 
-    if (!cfActivity.isResponseOk(activity, response)) {
-      return;
-    }
+    if (Activity.isErrorResponse(response)) return;
 
     let reportStatus = {
-      title: 'Reports Pending Approval',
-      url: 'https://expense.zoho.com/app#/expenses',
-      urlLabel: 'All Pending Reports',
+      title: T('Reports Pending Approval'),
+      link: 'https://expense.zoho.com/app#/expenses',
+      linkLabel: T('All Reports')
     };
 
     let noOfReports = response.body.expense_reports.length;
@@ -23,7 +18,9 @@ module.exports = async (activity) => {
     if (noOfReports != 0) {
       reportStatus = {
         ...reportStatus,
-        description: `You have ${noOfReports} expense ${noOfReports > 1 ? " reports" : " report"} waiting for approval.`,
+        description: noOfReports > 1 ?
+          T("You have {0} expense reports  waiting for approval.", noOfReports)
+          : T("You have 1 expense report waiting for approval."),
         color: 'blue',
         value: noOfReports,
         actionable: true
@@ -31,13 +28,13 @@ module.exports = async (activity) => {
     } else {
       reportStatus = {
         ...reportStatus,
-        description: `You have no unapproved expense reports`,
+        description: T(`You have no unapproved expense reports.`),
         actionable: false
       };
     }
-    
+
     activity.Response.Data = reportStatus;
   } catch (error) {
-    cfActivity.handleError(activity, error);
+    Activity.handleError(error);
   }
 };

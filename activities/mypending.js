@@ -1,23 +1,17 @@
 'use strict';
-
-const cfActivity = require('@adenin/cf-activity');
 const api = require('./common/api');
 
 module.exports = async function (activity) {
   try {
-    api.initialize(activity);
-
-    var pagination = cfActivity.pagination(activity);
+    var pagination = Activity.pagination();
     const response = await api(`/expensereports?filter_by=Type.Approval%2CStatus.Submitted`+
     `&page=${pagination.page}&per_page=${pagination.pageSize}`);
 
-    if (!cfActivity.isResponseOk(activity, response)) {
-      return;
-    }
+    if (Activity.isErrorResponse(response)) return;
 
     activity.Response.Data = convertReports(response);
   } catch (error) {
-    cfActivity.handleError(activity, error);
+    Activity.handleError(error);
   }
 };
 
