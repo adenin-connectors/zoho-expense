@@ -3,14 +3,15 @@ const api = require('./common/api');
 
 module.exports = async (activity) => {
   try {
+    api.initialize(activity);
     const response = await api('/expensereports?filter_by=Type.Approval%2CStatus.Submitted');
 
-    if (Activity.isErrorResponse(response)) return;
+    if ($.isErrorResponse(activity, response)) return;
 
     let reportStatus = {
-      title: T('Reports Pending Approval'),
+      title: T(activity, 'Reports Pending Approval'),
       link: 'https://expense.zoho.com/app#/expenses',
-      linkLabel: T('All Reports')
+      linkLabel: T(activity, 'All Reports')
     };
 
     let noOfReports = response.body.expense_reports.length;
@@ -19,8 +20,8 @@ module.exports = async (activity) => {
       reportStatus = {
         ...reportStatus,
         description: noOfReports > 1 ?
-          T("You have {0} expense reports  waiting for approval.", noOfReports)
-          : T("You have 1 expense report waiting for approval."),
+          T(activity, "You have {0} expense reports  waiting for approval.", noOfReports)
+          : T(activity, "You have 1 expense report waiting for approval."),
         color: 'blue',
         value: noOfReports,
         actionable: true
@@ -28,13 +29,13 @@ module.exports = async (activity) => {
     } else {
       reportStatus = {
         ...reportStatus,
-        description: T(`You have no unapproved expense reports.`),
+        description: T(activity, `You have no unapproved expense reports.`),
         actionable: false
       };
     }
 
     activity.Response.Data = reportStatus;
   } catch (error) {
-    Activity.handleError(error);
+    $.handleError(activity, error);
   }
 };
